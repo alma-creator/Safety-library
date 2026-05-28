@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Library - JoyRide Logistics LLC</title>
+    <style>
+        /* Reset i osnovni stilovi */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        /* Brendirane boje */
+        :root {
+            --primary-red: #dc3545;
+            --primary-black: #1a1a1a;
+            --dark-gray: #2d3142;
+            --light-gray: #f4f5f7;
+            --white: #ffffff;
+        }
+
+        /* Header / Banner */
+        .header {
+            background: linear-gradient(135deg, var(--primary-black) 60%, var(--primary-red));
+            color: var(--white);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--primary-red);
+        }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .company-badge {
+            background-color: var(--primary-red);
+            color: var(--white);
+            display: inline-block;
+            padding: 5px 15px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 15px;
+            color: #cccccc;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Glavni kontejner */
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        /* Info traka / Obaveštenje */
+        .notice-bar {
+            background-color: var(--white);
+            border-left: 5px solid var(--primary-red);
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .notice-bar strong {
+            color: var(--primary-red);
+        }
+
+        /* Grid sa sekcijama */
+        .section-title {
+            font-size: 20px;
+            color: var(--primary-black);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--primary-black);
+            padding-bottom: 5px;
+        }
+
+        /* Harmonika / Sklopive grupe (Collapsible) */
+        .collapsible-wrapper {
+            margin-bottom: 25px;
+        }
+
+        .accordion-item {
+            background-color: var(--white);
+            margin-bottom: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid #e1e4e8;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background-color: var(--white);
+            padding: 18px 20px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-black);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .accordion-header:hover {
+            background-color: #fff5f5;
+            color: var(--primary-red);
+        }
+
+        .accordion-header::after {
+            content: '+';
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-red);
+        }
+
+        .accordion-item.active .accordion-header {
+            background-color: var(--primary-black);
+            color: var(--white);
+        }
+
+        .accordion-item.active .accordion-header::after {
+            content: '−';
+            color: var(--white);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--white);
+        }
+
+        .accordion-body {
+            padding: 20px;
+            border-top: 1px solid #e1e4e8;
+            font-size: 15px;
+            color: #444;
+        }
+
+        /* Kartice za resurse i linkove */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .card {
+            background-color: var(--white);
+            border-top: 4px solid var(--primary-red);
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            color: var(--primary-black);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Dugmad (Buttons) */
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-red);
+            color: var(--white);
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            text-align: center;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #bd2130;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: var(--primary-black);
+        }
+
+        .btn-secondary:hover {
+            background-color: #000000;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        /* Hitni Poziv / CTA Sekcija */
+        .cta-section {
+            background-color: var(--primary-black);
+            color: var(--white);
+            padding: 30px 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 40px;
+            border-bottom: 4px solid var(--primary-red);
+        }
+
+        .cta-section h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .cta-section p {
+            font-size: 15px;
+            color: #cccccc;
+            margin-bottom: 20px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 13px;
+            color: #666;
+            margin-top: 40px;
+            background-color: #111;
+            color: #888;
+        }
+
+        /* Prilagođeno za mobilne uređaje (Responsive) */
+        @media (min-width: 600px) {
+            .header { padding: 60px 20px; }
+            .header h1 { font-size: 36px; }
+            .cta-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+            .cta-buttons .btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Gornji Baner -->
+    <header class="header">
+        <div class="header-container">
+            <span class="company-badge">JoyRide Logistics LLC</span>
+            <h1>Safety Library for Drivers</h1>
+            <p>Vaš centralni centar za bezbjednost, FMCSA propise i resurse na putu.</p>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Važna napomena za vozače -->
+        <div class="notice-bar">
+            <p><strong>VAŽNO OBAVJEŠTENJE:</strong> Svi vozači su dužni da se pridržavaju HOS pravila i redovno vrše DVIR inspekcije prije i nakon svake vožnje. Bezbjednost je naš prioritet broj jedan!</p>
+        </div>
+
+        <!-- SEKCIJA 1: REGULATIVE I PROLOGI -->
+        <h2 class="section-title">1. FMCSA & HOS Regulative</h2>
+        <div class="collapsible-wrapper">
+            
+            <div class="accordion-item">
+                <button class="accordion-header">Samsara ELD & Hours of Service (HOS)</button>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p>Ovdje unesite detaljna uputstva za vozače o tome kako da upravljaju svojim satima rada (HOS) unutar Samsara aplikacije. Objasnite pravila za 11-satnu vožnju, 14-satni limit i obavezne pauze.</p>
+                        <br>
+                        <a href="#" class="btn btn-secondary">Preuzmi HOS Vodič (PDF)</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Pravila za Personal Conveyance (PC)</button>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p>Personal Conveyance se smije koristiti isključivo kada je vozač oslobođen svih dužnosti. Svaka zloupotreba PC statusa podliježe sankcijama i kršenju FMCSA pravila. Provjerite smjernice prije aktivacije.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">DVIR (Pre-Trip & Post-Trip Inspekcije)</button>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p>Svaki defekt na kamionu ili prikolici mora biti evidentiran odmah kroz Samsara DVIR sistem. Nemojte kretati na put ukoliko vozilo ima kritične sigurnosne nedostatke.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SEKCIJA 2: TEHNOLOGIJA -->
+        <h2 class="section-title">2. Samsara AI Kamere & Tehnologija</h2>
+        <div class="collapsible-wrapper">
+            
+            <div class="accordion-item">
+                <button class="accordion-header">Kako rade Samsara AI Dash kamere?</button>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p>Naše kamere štite vas na putu. Saznajte kako sistem prepoznaje sigurnosne rizike poput držanja distance i znakova umora, i kako vam AI coaching pomaže da ostanete bezbjedni.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Šta raditi u slučaju incidenta / udesa?</button>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p>1. Osigurajte mjesto nesreće.<br>2. Odmah obavijestite policiju i Safety Department.<br>3. Pritisnite dugme na Samsara kameri da ručno sačuvate video zapis.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SEKCIJA 3: PROGRAMI ZA VOZAČE -->
+        <h2 class="section-title">3. Driver Retention Program (DRP)</h2>
+        <div class="resource-grid">
+            
+            <div class="card">
+                <div>
+                    <h3>Safety Bonusi</h3>
+                    <p>Saznajte kako čista vožnja bez incidenata i visoki Samsara Safety Score direktno povećavaju vašu zaradu svakog mjeseca.</p>
+                </div>
+                <a href="#" class="btn btn-block">Pogledaj Detalje Bonusa</a>
+            </div>
+
+            <div class="card">
+                <div>
+                    <h3>Elite Driver Status</h3>
+                    <p>Najbolji vozači u JoyRide Logistics ostvaruju pravo na ekskluzivne beneficije, prioritet pri izboru ruta i specijalne nagrade.</p>
+                </div>
+                <a href="#" class="btn btn-block">Kako postati Elite?</a>
+            </div>
+
+        </div>
+
+        <!-- HITNE AKCIJE / KONTAKT -->
+        <div class="cta-section">
+            <h2>Trebate hitnu podršku na putu?</h2>
+            <p>Safety tim JoyRide Logistics je dostupan za vas 24/7. Kliknite ispod za direktan kontakt.</p>
+            <div class="cta-buttons">
+                <a href="tel:+10000000000" class="btn">[ 📞 POZOVITE SAFETY ]</a>
+                <a href="mailto:safety@joyridelogistics.com" class="btn btn-secondary">[ ✉️ POŠALJITE EMAIL ]</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Podnožje stranice -->
+    <footer class="footer">
+        <p>&copy; 2026 JoyRide Logistics LLC. Sva prava zadržana. | Safety Department</p>
+    </footer>
+
+    <!-- Skripta za funkcionalnost harmonike (otvaranje/zatvaranje na klik) -->
+    <script>
+        document.querySelectorAll('.accordion-header').forEach(button => {
+            button.addEventListener('click', () => {
+                const accordionItem = button.parentElement;
+                const content = accordionItem.querySelector('.accordion-content');
+                
+                // Zatvori ostale ako su otvoreni
+                document.querySelectorAll('.accordion-item').forEach(item => {
+                    if (item !== accordionItem && item.classList.contains('active')) {
+                        item.classList.remove('active');
+                        item.querySelector('.accordion-content').style.maxHeight = null;
+                    }
+                });
+
+                // Prebaci trenutni
+                accordionItem.classList.toggle('active');
+                
+                if (accordionItem.classList.contains('active')) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                } else {
+                    content.style.maxHeight = null;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
